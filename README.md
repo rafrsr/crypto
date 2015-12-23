@@ -1,4 +1,10 @@
 # Crypto
+[![Build Status](https://travis-ci.org/rafrsr/crypto.svg?branch=master)](https://travis-ci.org/rafrsr/crypto)
+[![Latest Stable Version](https://poser.pugx.org/rafrsr/crypto/version)](https://packagist.org/packages/rafrsr/crypto)
+[![Latest Unstable Version](https://poser.pugx.org/rafrsr/crypto/v/unstable)](//packagist.org/packages/rafrsr/crypto)
+[![Total Downloads](https://poser.pugx.org/rafrsr/crypto/downloads)](https://packagist.org/packages/rafrsr/crypto)
+[![License](https://poser.pugx.org/rafrsr/crypto/license)](https://packagist.org/packages/rafrsr/crypto)
+
 Easy encrypt and decrypt strings in PHP.
 
 ## Features
