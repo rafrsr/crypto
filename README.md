@@ -1,5 +1,5 @@
 # Crypto
-[![Build Status](https://travis-ci.org/rafrsr/crypto.svg?branch=master)](https://travis-ci.org/rafrsr/crypto)
+[![Build Status](https://travis-ci.org/rafrsr/Crypto.svg?branch=master)](https://travis-ci.org/rafrsr/Crypto)
 [![Latest Stable Version](https://poser.pugx.org/rafrsr/crypto/version)](https://packagist.org/packages/rafrsr/crypto)
 [![Latest Unstable Version](https://poser.pugx.org/rafrsr/crypto/v/unstable)](//packagist.org/packages/rafrsr/crypto)
 [![Total Downloads](https://poser.pugx.org/rafrsr/crypto/downloads)](https://packagist.org/packages/rafrsr/crypto)
