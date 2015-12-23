@@ -1,6 +1,12 @@
 # Crypto
 Easy encrypt and decrypt strings in PHP.
 
+## Features
+
+- Easy usage `Crypto::build('secretKey', MCRYPT_RIJNDAEL_256)->encrypt('secret message')`
+- Support most populars MCRYPT algorithms
+- Encryption verification through the method `isEncrypted($data)`
+
 ## Usage
 
 ````php
