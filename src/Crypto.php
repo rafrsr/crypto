@@ -32,15 +32,13 @@ class Crypto
             if (class_exists($encryptor)) {
                 $encryptor = new $encryptor;
             } else {
-                $encryptor = new MCryptEncryptor($encryptor);
+                $encryptor = new MCryptEncryptor($secretKey, $encryptor);
             }
         }
 
         if (!($encryptor instanceof EncryptorInterface)) {
             throw new \LogicException('Invalid encryptor, should implements EncryptorInterface.');
         }
-
-        $encryptor->setSecretKey($secretKey);
 
         return $encryptor;
     }

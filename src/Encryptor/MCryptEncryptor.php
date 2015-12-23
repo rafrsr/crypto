@@ -42,9 +42,10 @@ class MCryptEncryptor implements EncryptorInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct($algorithm = MCRYPT_RIJNDAEL_256)
+    public function __construct($secretKey, $algorithm = MCRYPT_RIJNDAEL_256)
     {
         $this->algorithm = $algorithm;
+        $this->secretKey = $secretKey;
         $this->middlewareEncryptor = new Base64Encryptor();
     }
 
@@ -78,18 +79,6 @@ class MCryptEncryptor implements EncryptorInterface
     public function isEncrypted($data)
     {
         return $this->middlewareEncryptor->isEncrypted($data);
-    }
-
-    /**
-     * @param string $secretKey
-     *
-     * @return $this
-     */
-    public function setSecretKey($secretKey)
-    {
-        $this->secretKey = md5($secretKey);
-
-        return $this;
     }
 
     /**

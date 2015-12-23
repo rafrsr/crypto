@@ -25,15 +25,6 @@ interface EncryptorInterface
     public function getName();
 
     /**
-     * Key to use in encryption process
-     *
-     * @param $secretKey
-     *
-     * @return mixed
-     */
-    public function setSecretKey($secretKey);
-
-    /**
      * @param string $data Plain text to encrypt
      *
      * @return string Encrypted text

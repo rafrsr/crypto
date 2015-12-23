@@ -27,8 +27,7 @@ class MCryptEncryptorTest extends \PHPUnit_Framework_TestCase
             MCRYPT_RIJNDAEL_128
         ];
         foreach ($algorithms as $algorithm) {
-            $encryptor = new MCryptEncryptor($algorithm);
-            $encryptor->setSecretKey('12345678901234567890123456');
+            $encryptor = new MCryptEncryptor('12345678901234567890123456', $algorithm);
 
             $message = 'This is a secret message';
             $encrypted = $encryptor->encrypt($message);
