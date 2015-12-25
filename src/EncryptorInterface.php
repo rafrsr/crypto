@@ -12,7 +12,7 @@
 namespace Rafrsr\Crypto;
 
 /**
- * EncryptorRegistry interface for encryptor
+ * EncryptorInterface
  */
 interface EncryptorInterface
 {
@@ -29,13 +29,4 @@ interface EncryptorInterface
      * @return string Plain text
      */
     public function decrypt($data);
-
-    /**
-     * Verify if the data is already encrypted
-     *
-     * @param string $data
-     *
-     * @return mixed
-     */
-    public function isEncrypted($data);
 }

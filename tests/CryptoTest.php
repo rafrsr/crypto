@@ -12,11 +12,70 @@
 namespace Rafrsr\Crypto\Tests;
 
 use Rafrsr\Crypto\Crypto;
+use Rafrsr\Crypto\EncryptorInterface;
 
 class CryptoTest extends \PHPUnit_Framework_TestCase
 {
     public function testBuild()
     {
-        $this->assertInstanceOf('Rafrsr\Crypto\Encryptor\MCryptEncryptor', Crypto::build('1234', MCRYPT_RIJNDAEL_256));
+        $message = 'This is a secret message';
+        $encryptor = Crypto::build('1234', MCRYPT_RIJNDAEL_256);
+
+        $encrypted = $encryptor->encrypt($message);
+        $this->assertNotEquals($message, $encrypted);
+
+        //avoid double encryption
+        $this->assertEquals($encrypted, $encryptor->encrypt($encrypted));
+
+        $this->assertTrue($encryptor->isEncrypted($encrypted));
+
+        $decrypted = $encryptor->decrypt($encrypted);
+        $this->assertEquals($message, $decrypted);
+
+        //avoid double decryption
+        $this->assertEquals($decrypted, $encryptor->decrypt($decrypted));
+
+        $this->assertFalse($encryptor->isEncrypted($decrypted));
+    }
+
+    public function testBuildCustomEncryptor()
+    {
+        $message = 'This is a secret message';
+        $encryptor = Crypto::build('1234', 'Rafrsr\Crypto\Tests\CustomEncryptor');
+
+        $encrypted = $encryptor->encrypt($message);
+        $this->assertNotEquals($message, $encrypted);
+
+        //avoid double encryption
+        $this->assertEquals($encrypted, $encryptor->encrypt($encrypted));
+
+        $this->assertTrue($encryptor->isEncrypted($encrypted));
+
+        $decrypted = $encryptor->decrypt($encrypted);
+        $this->assertEquals($message, $decrypted);
+
+        //avoid double decryption
+        $this->assertEquals($decrypted, $encryptor->decrypt($decrypted));
+
+        $this->assertFalse($encryptor->isEncrypted($decrypted));
+    }
+}
+
+class CustomEncryptor implements EncryptorInterface
+{
+    /**
+     * @inheritDoc
+     */
+    public function encrypt($data)
+    {
+       return base64_encode($data);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function decrypt($data)
+    {
+        return base64_decode($data);
     }
 }

@@ -12,6 +12,7 @@
 namespace Rafrsr\Crypto;
 
 use Rafrsr\Crypto\Encryptor\MCryptEncryptor;
+use Rafrsr\Crypto\Exception\AlgorithmNotSupportedException;
 
 /**
  * Class Crypto
@@ -19,18 +20,77 @@ use Rafrsr\Crypto\Encryptor\MCryptEncryptor;
 class Crypto
 {
     /**
-     * Create a build in encryptor using given algorithm
+     * @var EncryptorInterface
+     */
+    protected $encryptor;
+
+    /**
+     * BaseEncryptor constructor.
+     */
+    public function __construct(EncryptorInterface $encryptor)
+    {
+        $this->encryptor = $encryptor;
+    }
+
+    /**
+     * Factory
+     *
+     * Create a Crypto instance using a build in encryptor with given encryptor name
      * for now support all most used MCRYPT_* algorithms
      *
      * @param string $secretKey Secret key used for encryption/decryption
-     * @param string $algorithm one of MCRYPT_* constants
+     * @param string $encryptor one of MCRYPT_* constants or class or instance implementing EncryptorInterface
      *
-     * @return MCryptEncryptor|string
+     * @return Crypto
+     * @throws AlgorithmNotSupportedException
      */
-    public static function build($secretKey, $algorithm = MCRYPT_RIJNDAEL_256)
+    public static function build($secretKey, $encryptor = MCRYPT_RIJNDAEL_256)
     {
-        $algorithm = new MCryptEncryptor($secretKey, $algorithm);
+        if (is_string($encryptor)) {
+            $algorithms = mcrypt_list_algorithms();
+            if (in_array($encryptor, $algorithms)) {
+                $encryptor = new MCryptEncryptor($secretKey, $encryptor);
+            } elseif (class_exists($encryptor)) {
+                $encryptor = new $encryptor;
+            }
+        }
 
-        return $algorithm;
+        return new Crypto($encryptor);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function encrypt($data)
+    {
+        if (!$this->isEncrypted($data)) {
+            return base64_encode("<Crypto>" . $this->encryptor->encrypt($data));
+        }
+
+        return $data;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function decrypt($data)
+    {
+        if ($this->isEncrypted($data)) {
+            return $this->encryptor->decrypt(substr(base64_decode($data), 8));
+        }
+
+        return $data;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isEncrypted($data)
+    {
+        if (substr(base64_decode($data), 0, 8) == '<Crypto>') {
+            return true;
+        }
+
+        return false;
     }
 }

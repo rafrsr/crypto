@@ -35,18 +35,12 @@ class MCryptEncryptor implements EncryptorInterface
     protected $module;
 
     /**
-     * @var Base64Encryptor
-     */
-    protected $middlewareEncryptor;
-
-    /**
      * {@inheritdoc}
      */
     public function __construct($secretKey, $algorithm = MCRYPT_RIJNDAEL_256)
     {
         $this->algorithm = $algorithm;
         $this->secretKey = $secretKey;
-        $this->middlewareEncryptor = new Base64Encryptor();
     }
 
     /**
@@ -54,11 +48,9 @@ class MCryptEncryptor implements EncryptorInterface
      */
     public function encrypt($data)
     {
-        if (!$this->isEncrypted($data)) {
-            $this->init();
-            $data = trim($this->middlewareEncryptor->encrypt(mcrypt_generic($this->module, $data)));
-            $this->close();
-        }
+        $this->init();
+        $data = trim(base64_encode(mcrypt_generic($this->module, $data)));
+        $this->close();
 
         return $data;
     }
@@ -68,21 +60,11 @@ class MCryptEncryptor implements EncryptorInterface
      */
     public function decrypt($data)
     {
-        if ($this->isEncrypted($data)) {
-            $this->init();
-            $data = trim(mdecrypt_generic($this->module, $this->middlewareEncryptor->decrypt($data)));
-            $this->close();
-        }
+        $this->init();
+        $data = trim(mdecrypt_generic($this->module, base64_decode($data)));
+        $this->close();
 
         return $data;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isEncrypted($data)
-    {
-        return $this->middlewareEncryptor->isEncrypted($data);
     }
 
     /**
