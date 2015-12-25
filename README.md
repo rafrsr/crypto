@@ -13,6 +13,7 @@ Easy encrypt and decrypt strings in PHP.
 - Easy usage `Crypto::build('secretKey')->encrypt('secret message')`
 - Support most populars MCRYPT algorithms
 - Encryption verification through the method `isEncrypted($data)`
+- Prevent double encryption/decryption
 
 ## Usage
 
