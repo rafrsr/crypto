@@ -21,22 +21,6 @@ final class Base64Encryptor implements EncryptorInterface
     /**
      * @inheritDoc
      */
-    public function getName()
-    {
-        return 'base64';
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setSecretKey($secretKey)
-    {
-        // not required
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function encrypt($data)
     {
         if (!$this->isEncrypted($data)) {
