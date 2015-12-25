@@ -16,14 +16,6 @@ namespace Rafrsr\Crypto;
  */
 interface EncryptorInterface
 {
-
-    /**
-     * Name of the encryptor
-     *
-     * @return string
-     */
-    public function getName();
-
     /**
      * @param string $data Plain text to encrypt
      *
