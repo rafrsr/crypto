@@ -10,7 +10,7 @@ Easy encrypt and decrypt strings in PHP.
 
 ## Features
 
-- Easy usage `Crypto::build('secretKey', MCRYPT_RIJNDAEL_256)->encrypt('secret message')`
+- Easy usage `Crypto::build('secretKey')->encrypt('secret message')`
 - Support most populars MCRYPT algorithms
 - Encryption verification through the method `isEncrypted($data)`
 
@@ -20,7 +20,7 @@ Easy encrypt and decrypt strings in PHP.
 
 use Rafrsr\Crypto\Crypto;
 
-$encryptor = Crypto::build('JH83UN177772JJASHGAGG38UABASDSD', MCRYPT_RIJNDAEL_256);
+$encryptor = Crypto::build('JH83UN177772JJASHGAGG38UABASDSD', MCRYPT_RIJNDAEL_128);
 
 $secret = $encryptor->encrypt('This is a secret message');
 
