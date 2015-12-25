@@ -24,10 +24,16 @@ class Base64EncryptorTest extends \PHPUnit_Framework_TestCase
         $encrypted = $encryptor->encrypt($message);
         $this->assertNotEquals($message, $encrypted);
 
+        //avoid double encryption
+        $this->assertEquals($encrypted, $encryptor->encrypt($encrypted));
+
         $this->assertTrue($encryptor->isEncrypted($encrypted));
 
         $decrypted = $encryptor->decrypt($encrypted);
         $this->assertEquals($message, $decrypted);
+
+        //avoid double decryption
+        $this->assertEquals($decrypted, $encryptor->decrypt($decrypted));
 
         $this->assertFalse($encryptor->isEncrypted($decrypted));
     }
