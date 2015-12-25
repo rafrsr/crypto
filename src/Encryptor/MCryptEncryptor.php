@@ -54,9 +54,11 @@ class MCryptEncryptor implements EncryptorInterface
      */
     public function encrypt($data)
     {
-        $this->init();
-        $data = trim($this->middlewareEncryptor->encrypt(mcrypt_generic($this->module, $data)));
-        $this->close();
+        if (!$this->isEncrypted($data)) {
+            $this->init();
+            $data = trim($this->middlewareEncryptor->encrypt(mcrypt_generic($this->module, $data)));
+            $this->close();
+        }
 
         return $data;
     }
@@ -66,9 +68,11 @@ class MCryptEncryptor implements EncryptorInterface
      */
     public function decrypt($data)
     {
-        $this->init();
-        $data = trim(mdecrypt_generic($this->module, $this->middlewareEncryptor->decrypt($data)));
-        $this->close();
+        if ($this->isEncrypted($data)) {
+            $this->init();
+            $data = trim(mdecrypt_generic($this->module, $this->middlewareEncryptor->decrypt($data)));
+            $this->close();
+        }
 
         return $data;
     }
@@ -79,14 +83,6 @@ class MCryptEncryptor implements EncryptorInterface
     public function isEncrypted($data)
     {
         return $this->middlewareEncryptor->isEncrypted($data);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getName()
-    {
-        return $this->algorithm;
     }
 
     /**
