@@ -36,6 +36,12 @@ class CryptoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($decrypted, $encryptor->decrypt($decrypted));
 
         $this->assertFalse($encryptor->isEncrypted($decrypted));
+
+        //avoid encrypt/decrypt empty string
+        $this->assertEquals(null, $encryptor->encrypt(null));
+        $this->assertEquals('', $encryptor->encrypt(''));
+        $this->assertEquals(null, $encryptor->decrypt(null));
+        $this->assertEquals('', $encryptor->decrypt(''));
     }
 
     public function testBuildCustomEncryptor()
