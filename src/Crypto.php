@@ -19,27 +19,18 @@ use Rafrsr\Crypto\Encryptor\MCryptEncryptor;
 class Crypto
 {
     /**
-     * build
+     * Create a build in encryptor using given algorithm
+     * for now support all most used MCRYPT_* algorithms
      *
-     * @param        $secretKey
-     * @param string $encryptor MCRYPT_* constant, class name or instance implementing EncryptorInterface
+     * @param string $secretKey Secret key used for encryption/decryption
+     * @param string $algorithm one of MCRYPT_* constants
      *
      * @return MCryptEncryptor|string
      */
-    public static function build($secretKey, $encryptor = MCRYPT_RIJNDAEL_256)
+    public static function build($secretKey, $algorithm = MCRYPT_RIJNDAEL_256)
     {
-        if (is_string($encryptor)) {
-            if (class_exists($encryptor)) {
-                $encryptor = new $encryptor;
-            } else {
-                $encryptor = new MCryptEncryptor($secretKey, $encryptor);
-            }
-        }
+        $algorithm = new MCryptEncryptor($secretKey, $algorithm);
 
-        if (!($encryptor instanceof EncryptorInterface)) {
-            throw new \LogicException('Invalid encryptor, should implements EncryptorInterface.');
-        }
-
-        return $encryptor;
+        return $algorithm;
     }
 }
