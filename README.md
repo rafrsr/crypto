@@ -21,7 +21,8 @@ Easy encrypt and decrypt strings in PHP.
 
 use Rafrsr\Crypto\Crypto;
 
-$encryptor = Crypto::build('JH83UN177772JJASHGAGG38UABASDSD', MCRYPT_RIJNDAEL_128);
+$encryptor = Crypto::build('JH83UN177772JJASHGAGG38UABASDSD');
+//$encryptor = Crypto::build('JH83UN177772JJASHGAGG38UABASDSD', MCRYPT_RIJNDAEL_128); //using specific algorithm
 
 $secret = $encryptor->encrypt('This is a secret message');
 
@@ -34,3 +35,5 @@ $notSecret = $encryptor->decrypt($secret);
 if (!$encryptor->isEncrypted($notSecret)) {
     echo 'The message is not encrypted';
 }
+
+````
