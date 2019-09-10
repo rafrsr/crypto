@@ -55,7 +55,7 @@ class SodiumEncryptor implements EncryptorInterface
             sodium_memzero($authKey);
             $plaintext = sodium_crypto_stream_xor($cipherText, $nonce, $encKey);
             sodium_memzero($encKey);
-            if ($plaintext !== false) {
+            if (false !== $plaintext) {
                 return $plaintext;
             }
         } else {

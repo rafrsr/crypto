@@ -67,6 +67,11 @@ class MCryptEncryptor implements EncryptorInterface
         return $data;
     }
 
+    public function isEncrypted($data)
+    {
+        return $data && 0 === strpos(base64_decode($data), '<Crypto>');
+    }
+
     /**
      * init encryption module
      */

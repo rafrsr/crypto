@@ -80,6 +80,6 @@ class Crypto
 
     public function isEncrypted($data)
     {
-        return $data && 0 === strpos(base64_decode($data), '<Crypto>');
+        return \method_exists($this->encryptor, 'isEncrypted') ? $this->encryptor->isEncrypted($data) : true;
     }
 }
