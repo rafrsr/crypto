@@ -48,11 +48,15 @@ class MCryptEncryptor implements EncryptorInterface
      */
     public function encrypt($data)
     {
+        if (null === $data || '' === $data || $this->isEncrypted($data)) {
+            return $data;
+        }
+
         $this->init();
         $data = trim(base64_encode(mcrypt_generic($this->module, $data)));
         $this->close();
 
-        return $data;
+        return base64_encode('<Crypto>'.$data);
     }
 
     /**
@@ -60,14 +64,24 @@ class MCryptEncryptor implements EncryptorInterface
      */
     public function decrypt($data)
     {
-        $this->init();
-        $data = trim(mdecrypt_generic($this->module, base64_decode($data)));
-        $this->close();
+        if (!$this->isEncrypted($data)) {
+            return $data;
+        }
+
+        $data = substr(base64_decode($data), 8);
+
+        if ($data !== null && $data !== '') {
+            $this->init();
+            $data = trim(mdecrypt_generic($this->module, base64_decode($data)));
+            $this->close();
+
+            return $data;
+        }
 
         return $data;
     }
 
-    public function isEncrypted($data)
+    private function isEncrypted($data)
     {
         return $data && 0 === strpos(base64_decode($data), '<Crypto>');
     }

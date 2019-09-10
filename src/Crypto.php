@@ -59,27 +59,11 @@ class Crypto
 
     public function encrypt($data)
     {
-        if (null !== $data && '' !== $data && !$this->isEncrypted($data)) {
-            return base64_encode('<Crypto>'.$this->encryptor->encrypt($data));
-        }
-
-        return $data;
+        return $this->encryptor->encrypt($data);
     }
 
     public function decrypt($data)
     {
-        if ($this->isEncrypted($data)) {
-            $data = substr(base64_decode($data), 8);
-            if ($data !== null && $data !== '') {
-                return $this->encryptor->decrypt($data);
-            }
-        }
-
-        return $data;
-    }
-
-    public function isEncrypted($data)
-    {
-        return \method_exists($this->encryptor, 'isEncrypted') ? $this->encryptor->isEncrypted($data) : true;
+        return $this->encryptor->decrypt($data);
     }
 }
