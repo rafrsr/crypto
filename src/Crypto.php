@@ -12,6 +12,7 @@
 namespace Rafrsr\Crypto;
 
 use Rafrsr\Crypto\Encryptor\MCryptEncryptor;
+use Rafrsr\Crypto\Encryptor\SodiumEncryptor;
 use Rafrsr\Crypto\Exception\AlgorithmNotSupportedException;
 
 class Crypto
@@ -37,8 +38,12 @@ class Crypto
      */
     public static function build($secretKey, $encryptor)
     {
-        if (null === $encryptor && \defined('MCRYPT_RIJNDAEL_256')) {
-            $encryptor = MCRYPT_RIJNDAEL_256;
+        if (null === $encryptor) {
+            if (\defined('MCRYPT_RIJNDAEL_256')) {
+                $encryptor = MCRYPT_RIJNDAEL_256;
+            } else {
+                $encryptor = new SodiumEncryptor($secretKey);
+            }
         }
 
         if (is_string($encryptor)) {
