@@ -14,19 +14,10 @@ namespace Rafrsr\Crypto;
 use Rafrsr\Crypto\Encryptor\MCryptEncryptor;
 use Rafrsr\Crypto\Exception\AlgorithmNotSupportedException;
 
-/**
- * Class Crypto
- */
 class Crypto
 {
-    /**
-     * @var EncryptorInterface
-     */
     protected $encryptor;
 
-    /**
-     * BaseEncryptor constructor.
-     */
     public function __construct(EncryptorInterface $encryptor)
     {
         $this->encryptor = $encryptor;
@@ -38,41 +29,38 @@ class Crypto
      * Create a Crypto instance using a build in encryptor with given encryptor name
      * for now support all most used MCRYPT_* algorithms
      *
-     * @param string $secretKey Secret key used for encryption/decryption
-     * @param string $encryptor one of MCRYPT_* constants or class or instance implementing EncryptorInterface
+     * @param string                    $secretKey Secret key used for encryption/decryption
+     * @param string|EncryptorInterface $encryptor One of MCRYPT_* constants or class or instance implementing EncryptorInterface
      *
      * @return Crypto
      * @throws AlgorithmNotSupportedException
      */
-    public static function build($secretKey, $encryptor = MCRYPT_RIJNDAEL_256)
+    public static function build($secretKey, $encryptor)
     {
+        if (null === $encryptor && \defined('MCRYPT_RIJNDAEL_256')) {
+            $encryptor = MCRYPT_RIJNDAEL_256;
+        }
+
         if (is_string($encryptor)) {
-            $algorithms = mcrypt_list_algorithms();
-            if (in_array($encryptor, $algorithms)) {
+            if (class_exists($encryptor)) {
+                $encryptor = new $encryptor($secretKey);
+            } elseif (\function_exists('mcrypt_list_algorithms') && \in_array($encryptor, mcrypt_list_algorithms(), true)) {
                 $encryptor = new MCryptEncryptor($secretKey, $encryptor);
-            } elseif (class_exists($encryptor)) {
-                $encryptor = new $encryptor;
             }
         }
 
         return new Crypto($encryptor);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function encrypt($data)
     {
-        if (!$this->isEncrypted($data) && $data !== null && $data !== '') {
-            return base64_encode("<Crypto>" . $this->encryptor->encrypt($data));
+        if (null !== $data && '' !== $data && !$this->isEncrypted($data)) {
+            return base64_encode('<Crypto>'.$this->encryptor->encrypt($data));
         }
 
         return $data;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function decrypt($data)
     {
         if ($this->isEncrypted($data)) {
@@ -85,15 +73,8 @@ class Crypto
         return $data;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function isEncrypted($data)
     {
-        if (!empty($data) && substr(base64_decode($data), 0, 8) == '<Crypto>') {
-            return true;
-        }
-
-        return false;
+        return $data && 0 === strpos(base64_decode($data), '<Crypto>');
     }
 }
