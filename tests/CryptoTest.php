@@ -27,15 +27,11 @@ class CryptoTest extends \PHPUnit_Framework_TestCase
         //avoid double encryption
         $this->assertEquals($encrypted, $encryptor->encrypt($encrypted));
 
-        $this->assertTrue($encryptor->isEncrypted($encrypted));
-
         $decrypted = $encryptor->decrypt($encrypted);
         $this->assertEquals($message, $decrypted);
 
         //avoid double decryption
         $this->assertEquals($decrypted, $encryptor->decrypt($decrypted));
-
-        $this->assertFalse($encryptor->isEncrypted($decrypted));
 
         //avoid encrypt/decrypt empty string
         $this->assertEquals(null, $encryptor->encrypt(null));
@@ -55,15 +51,11 @@ class CryptoTest extends \PHPUnit_Framework_TestCase
         //avoid double encryption
         $this->assertEquals($encrypted, $encryptor->encrypt($encrypted));
 
-        $this->assertTrue($encryptor->isEncrypted($encrypted));
-
         $decrypted = $encryptor->decrypt($encrypted);
         $this->assertEquals($message, $decrypted);
 
         //avoid double decryption
         $this->assertEquals($decrypted, $encryptor->decrypt($decrypted));
-
-        $this->assertFalse($encryptor->isEncrypted($decrypted));
     }
 }
 
