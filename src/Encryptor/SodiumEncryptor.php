@@ -27,6 +27,10 @@ class SodiumEncryptor implements EncryptorInterface
      */
     public function encrypt($value)
     {
+        if (null === $value || '' === $value) {
+            return $value;
+        }
+
         $nonce = random_bytes(SODIUM_CRYPTO_STREAM_NONCEBYTES);
         list($encKey, $authKey) = $this->splitKeys();
 
@@ -44,6 +48,10 @@ class SodiumEncryptor implements EncryptorInterface
      */
     public function decrypt($value)
     {
+        if (null === $value || '' === $value) {
+            return $value;
+        }
+
         $raw = sodium_hex2bin($value);
         list($encKey, $authKey) = $this->splitKeys();
 
