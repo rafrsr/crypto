@@ -64,7 +64,7 @@ class MCryptEncryptor implements EncryptorInterface
      */
     public function decrypt($data)
     {
-        if (!$this->isEncrypted($data)) {
+        if (null === $data || '' === $data || !$this->isEncrypted($data)) {
             return $data;
         }
 
@@ -83,7 +83,7 @@ class MCryptEncryptor implements EncryptorInterface
 
     private function isEncrypted($data)
     {
-        return $data && 0 === strpos(base64_decode($data), '<Crypto>');
+        return 0 === strpos(base64_decode($data), '<Crypto>');
     }
 
     /**

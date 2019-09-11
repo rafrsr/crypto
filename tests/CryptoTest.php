@@ -48,14 +48,8 @@ class CryptoTest extends \PHPUnit_Framework_TestCase
         $encrypted = $encryptor->encrypt($message);
         $this->assertNotEquals($message, $encrypted);
 
-        //avoid double encryption
-        $this->assertEquals($encrypted, $encryptor->encrypt($encrypted));
-
         $decrypted = $encryptor->decrypt($encrypted);
         $this->assertEquals($message, $decrypted);
-
-        //avoid double decryption
-        $this->assertEquals($decrypted, $encryptor->decrypt($decrypted));
     }
 }
 
