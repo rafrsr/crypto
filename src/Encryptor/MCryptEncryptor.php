@@ -37,10 +37,14 @@ class MCryptEncryptor implements EncryptorInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct($secretKey, $algorithm = MCRYPT_RIJNDAEL_256)
+    public function __construct($secretKey, $algorithm = null)
     {
         $this->algorithm = $algorithm;
         $this->secretKey = $secretKey;
+
+        if (null === $algorithm && \defined('MCRYPT_RIJNDAEL_256')) {
+            $this->algorithm = MCRYPT_RIJNDAEL_256;
+        }
     }
 
     /**
